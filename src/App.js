@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
+import Wordle from './components/Wordle';
 
 const dbUrl = 'http://localhost:3001/solutions';
 
@@ -17,7 +18,7 @@ function App() {
   return (
     <div className="">
       <h1>Wordle</h1>
-      {solution && <div>Solution is: {solution}</div>}
+      {solution && <Wordle />}
     </div>
   );
 }
