@@ -11,7 +11,10 @@ const Wordle = ({ solution }) => {
   }, [handleKeyUp]);
 
   return (
-    <div>current guess = {currentGuess}</div>
+    <div>
+      <div>Solution = {solution}</div>
+      <div>Current Guess = {currentGuess}</div>
+    </div>
   );
 }
 
