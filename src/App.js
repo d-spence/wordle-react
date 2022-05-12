@@ -4,7 +4,7 @@ import Wordle from './components/Wordle';
 const dbUrl = 'http://localhost:3001/solutions';
 
 function App() {
-  const [solution, setSolution] = useState(null);
+  const [solution, setSolution] = useState('');
 
   useEffect(() => {
     fetch(dbUrl)
