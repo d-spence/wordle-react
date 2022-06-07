@@ -6,6 +6,7 @@ const useWordle = (solution) => {
   const [guesses, setGuesses] = useState([...Array(6)]);
   const [history, setHistory] = useState([]);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [usedKeys, setUsedKeys] = useState({});
 
   const formatGuess = () => {
     let solutionArray = [...solution];
@@ -14,18 +15,18 @@ const useWordle = (solution) => {
     });
 
     // find any green letters
-    formattedGuess.forEach((l, i) => {
-      if (solutionArray[i] === l.key) {
+    formattedGuess.forEach((letter, i) => {
+      if (solutionArray[i] === letter.key) {
         formattedGuess[i].color = 'green';
         solutionArray[i] = null;
       }
     });
 
     // find any yellow letters
-    formattedGuess.forEach((l, i) => {
-      if (solutionArray.includes(l.key) && l.color !== 'green') {
+    formattedGuess.forEach((letter, i) => {
+      if (solutionArray.includes(letter.key) && letter.color !== 'green') {
         formattedGuess[i].color = 'yellow';
-        solutionArray[solutionArray.indexOf(l.key)] = null;
+        solutionArray[solutionArray.indexOf(letter.key)] = null;
       }
     });
 
@@ -51,6 +52,24 @@ const useWordle = (solution) => {
       return prevTurn + 1;
     });
 
+    setUsedKeys((prevUsedKeys) => {
+      let newKeys = {...prevUsedKeys};
+      
+      formattedGuess.forEach((letter) => {
+        const currentColor = newKeys[letter.key];
+
+        if (letter.color === 'green') {
+          newKeys[letter.key] = 'green';
+        } else if (letter.color === 'yellow' && currentColor !== 'green') {
+          newKeys[letter.key] = 'yellow';
+        } else if (letter.color === 'grey' && currentColor !== 'green' && currentColor !== 'yellow') {
+          newKeys[letter.key] = 'grey';
+        }
+      });
+
+      return newKeys;
+    });
+
     setCurrentGuess('');
   }
 
@@ -69,7 +88,7 @@ const useWordle = (solution) => {
       // word must be 5 characters long
       if (currentGuess.length !== 5) {
         console.log('word must be 5 chars long');
-        return
+        return;
       }
 
       const formatted = formatGuess();
@@ -92,7 +111,7 @@ const useWordle = (solution) => {
     }
   }
 
-  return {turn, currentGuess, guesses, isCorrect, handleKeyUp}
+  return {turn, currentGuess, guesses, isCorrect, usedKeys, handleKeyUp}
 }
 
 export default useWordle;
